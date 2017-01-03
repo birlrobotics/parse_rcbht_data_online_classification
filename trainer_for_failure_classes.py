@@ -13,10 +13,41 @@ from config import failure_class_name_to_id
 data_type = "SIM"
 filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/data_cooker_code/parse_rcbht_data/training_data_of_failure_classes/"+data_type+"_HIRO_ONE_SA_ERROR_CHARAC_prob"
 
+best_so_far = {}
+
+
+
+train_x = list()
+train_y = list()
+test_x = list()
+test_y = list()
+
+failure_class = failure_class_name_to_id.keys()
+all_mat = {}
+
+for fc in failure_class:
+    file_name = "training_set_of_failure_class_"+fc
+    try:
+        mat = np.genfromtxt(os.path.join(filepath, file_name), dtype='string', delimiter=',')
+    except IOError:
+        continue
+    
+    #a half for training, a half for test
+
+    if len(mat.shape) == 1:
+        mat = mat.reshape((1, mat.shape[0]))
+
+    #shuffle all these trails before collecting them
+    all_mat[fc] = mat
+
+
+
+
 def main(method_name):
     global best_so_far
     global data_type 
-
+    global all_mat
+ 
     method_name = method_name.lower()
 
     train_x = list()
@@ -24,16 +55,14 @@ def main(method_name):
     test_x = list()
     test_y = list()
 
-    failure_class = failure_class_name_to_id.keys()
-
-    for fc in failure_class:
-        mat = np.genfromtxt(os.path.join(filepath, fc), dtype='string', delimiter=',')
-        #a half for training, a half for test
-        num_train_sample = mat.shape[0]/2
-
-        #shuffle all these trails before collecting them
+    for fc in all_mat:
+        mat = all_mat[fc]
         np.random.shuffle(mat)
         
+
+        num_train_sample = mat.shape[0]/2
+        print "num_train_sample", num_train_sample
+
         #collect training samples form the first half
         train_x.append(mat[0:num_train_sample, 0:len(mat[0]) - 1])
         train_y.append(mat[0:num_train_sample, len(mat[0]) - 1:])
@@ -47,8 +76,6 @@ def main(method_name):
     train_y = np.array(np.vstack(train_y), dtype=float)
     test_x = np.array(np.vstack(test_x), dtype=float)
     test_y = np.array(np.vstack(test_y), dtype=float)
-
-
 
     #train and get the model
     if method_name == 'svm':

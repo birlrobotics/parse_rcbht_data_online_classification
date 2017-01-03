@@ -1,0 +1,6 @@
+.*
+*.pyc
+models_by_method/*
+online_classification_results_by_method/*
+!.gitkeep
+!.gitignore
