@@ -1,6 +1,6 @@
 .*
 *.pyc
 models_by_method/*
-online_classification_results_by_method/*
+results_of_online_classification_for_each_state_organized_by_method/*
 !.gitkeep
 !.gitignore

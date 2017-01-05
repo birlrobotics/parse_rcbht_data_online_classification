@@ -86,7 +86,7 @@ for class_dir in os.listdir(config.streaming_data_dir):
     img_width = max_len
     
     output_signature = "thre_"+str(proba_threshold)+"_"+model_signature 
-    output_dir = os.path.join("online_classification_results_by_method", method_name, output_signature)
+    output_dir = os.path.join("results_of_online_classification_for_each_state_organized_by_method", method_name, output_signature)
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
