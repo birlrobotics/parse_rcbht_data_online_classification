@@ -11,8 +11,8 @@ label_map = {
 
 proba_threshold = 0.95
 
-model_dir = "./models_by_method"
-model_for_states = "svm/model_for_state_classification_dataType_REAL_method_svm_accuracy_92_avgProbaOfAll_73_avgByClass_C0P88_C1P72_C2P67_C3P64_.pkl"
+model_dir = "./good_models"
+model_for_states = "model_for_state_classification_dataType_REAL_method_svm_accuracy_95_avgProbaOfAll_84_avgByClass_C0P90_C1P87_C2P73_C3P87_.pkl"
 
 failure_x_base = ["+x", ""]
 failure_y_base = ["+y", "-y", ""]
