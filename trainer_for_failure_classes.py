@@ -10,7 +10,7 @@ import os
 
 from config import failure_class_name_to_id
 data_type = "SIM"
-filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/data_cooker_code/parse_rcbht_data/training_data_of_failure_classes/"+data_type+"_HIRO_ONE_SA_ERROR_CHARAC_prob"
+filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/data_cooker_code/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_ONE_SA_ERROR_CHARAC_prob"
 
 
 failure_class = failure_class_name_to_id.keys()
@@ -21,6 +21,7 @@ for fc in failure_class:
     try:
         mat = np.genfromtxt(os.path.join(filepath, file_name), dtype='string', delimiter=',')
     except IOError:
+        print "no data for class", fc
         continue
     
     #a half for training, a half for test
