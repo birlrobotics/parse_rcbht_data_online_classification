@@ -18,10 +18,18 @@ all_mat = {}
 
 filelist = [success_filepath+'/training_set_of_success', failure_filepath+'/training_set_of_fail']
 
+min_amount = None
+
 for file in filelist:
     mat = np.genfromtxt(file, dtype='string', delimiter=',')
     #a half for training, a half for test
     all_mat[file] = mat
+
+    if min_amount is None or mat.shape[0] < min_amount:
+        min_amount = mat.shape[0]  
+
+for k in all_mat:
+    all_mat[k] = all_mat[k][0:min_amount, :]
 
 if __name__ == "__main__":
     from optparse import OptionParser
