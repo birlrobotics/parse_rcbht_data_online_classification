@@ -41,14 +41,45 @@ if __name__ == "__main__":
     fail_test_x = fail_mat_for_test[:, 0:sample_size-1]
     fail_test_y = fail_mat_for_test[:, sample_size-1:]
 
-    import random
-    from datetime import datetime
-    random.seed(datetime.now())
-    while True:
-        model = svm.OneClassSVM(random_state=random.randint(0, 271462243)).fit(succ_train_x)
-        print succ_amount
-        print "---"
-        print model.predict(succ_train_x)
-        print model.predict(succ_test_x)
 
+
+    #best nu found: 0.1304    
+
+    best = [0, 0, 0]
+    nu = 0
+    while nu < 1:
+        nu += 0.0001
+
+        model = svm.OneClassSVM(nu=nu).fit(succ_train_x)
+
+
+        p_succ_train = model.predict(succ_train_x)
+        p_succ_test = model.predict(succ_test_x)
+        p_fail_test = model.predict(fail_test_x)
+
+        succ_train_good = p_succ_train[p_succ_train == 1].size
+        succ_test_good = p_succ_test[p_succ_test == 1].size
+        fail_test_good = p_fail_test[p_fail_test == -1].size
+
+        report = False
+        if succ_train_good > best[0]:
+            best[0] = succ_train_good
+            report = True
+
+        if succ_test_good > best[1]:
+            best[1] = succ_test_good
+            report = True
+
+        if fail_test_good > best[2]:
+            best[2] = fail_test_good
+            report = True
     
+        if report:
+            print '---'
+            print "nu", nu
+            print "succ train:", succ_train_good, '/', p_succ_train.size
+            print "succ test:", succ_test_good, '/', p_succ_test.size
+            print "fail test:", fail_test_good, '/', p_fail_test.size
+            
+
+        
