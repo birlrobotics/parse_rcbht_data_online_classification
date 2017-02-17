@@ -12,6 +12,62 @@ class CommonTrainer(object):
         self.train_method = train_method.lower()
         self.best_so_far = {}
 
+    def run_incremental_trainings(self):
+        import csv
+
+        all_mat = self.all_mat
+        train_method = self.train_method
+        best_so_far = self.best_so_far
+
+
+        test_set_samples = list()
+        test_set_labels = list()
+
+
+        # we always use the second half of data as test set
+        for class_name in all_mat:
+            mat = all_mat[class_name]
+            np.random.shuffle(mat)
+
+            max_num_train_sample = mat.shape[0]/2
+            
+            test_set_samples.append(mat[max_num_train_sample:, 0:len(mat[0]) - 1])
+            test_set_labels.append(mat[max_num_train_sample:, len(mat[0]) - 1:])
+
+
+        # we use the first half of data as training set in an incremental way 
+        C = pow(10,-5)
+        C_steps = 10
+        size_steps = 10
+
+        for now_kernel in ["linear", "poly", "rbf", "sigmoid", "precomputed"]:
+            for now_C_step in range(C_steps):
+                now_C = C*pow(10, now_C_step)
+                for now_size_step in range(size_steps):
+                    ratio = float(now_size_step)/size_steps
+
+                    training_set_samples = list()
+                    training_set_labels = list()
+
+                    for class_name in all_mat:
+                        mat = all_mat[class_name]
+
+                        max_num_train_sample = mat.shape[0]/2
+                        now_num_train_sample = int(ratio*max_num_train_sample)
+
+                        #collect training samples 
+                        training_set_samples.append(mat[0:now_num_train_sample, 0:len(mat[0]) - 1])
+                        training_set_labels.append(mat[0:now_num_train_sample, len(mat[0]) - 1:])
+                
+                        from sklearn.model_selection import cross_val_score
+                        clf = svm.SVC(kernel=now_kernel, C=now_C)
+                        scores = cross_val_score(clf, iris.data, iris.target, cv=5)
+
+
+                        print "now_kernel", now_kernel, "now_C", now_C, "now_num_train_sample", now_num_train_sample
+                        print scores
+
+
     def run_one_training(self):
         all_mat = self.all_mat
         train_method = self.train_method
