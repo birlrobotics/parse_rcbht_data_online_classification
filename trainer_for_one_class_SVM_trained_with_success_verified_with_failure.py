@@ -22,7 +22,11 @@ filelist = [success_filepath+'/training_set_of_success', failure_filepath+'/trai
 succ_mat = np.genfromtxt(filelist[0], dtype='string', delimiter=',')
 fail_mat = np.genfromtxt(filelist[1], dtype='string', delimiter=',')
 
-if __name__ == "__main__":
+
+
+
+
+def try_one_class_svm():
     sample_size = succ_mat.shape[1]
     succ_amount = succ_mat.shape[0]
 
@@ -44,7 +48,7 @@ if __name__ == "__main__":
 
 
     #best nu found: 0.1304    
-
+    '''
     best = [0, 0, 0]
     nu = 0
     while nu < 1:
@@ -81,5 +85,71 @@ if __name__ == "__main__":
             print "succ test:", succ_test_good, '/', p_succ_test.size
             print "fail test:", fail_test_good, '/', p_fail_test.size
             
-
+    '''
         
+    nu = 0.1304
+    model = svm.OneClassSVM(nu=nu).fit(succ_train_x)
+
+    p_succ_train = model.predict(succ_train_x)
+    p_succ_test = model.predict(succ_test_x)
+    p_fail_test = model.predict(fail_test_x)
+
+    succ_train_good = p_succ_train[p_succ_train == 1].size
+    succ_test_good = p_succ_test[p_succ_test == 1].size
+    fail_test_good = p_fail_test[p_fail_test == -1].size
+
+    print 'one class SVM---'
+    print "succ train:", succ_train_good, '/', p_succ_train.size
+    print "succ test:", succ_test_good, '/', p_succ_test.size
+    print "fail test:", fail_test_good, '/', p_fail_test.size
+            
+
+def try_normal_svm():
+    sample_size = succ_mat.shape[1]
+    succ_amount = succ_mat.shape[0]
+
+    succ_mat_for_train = succ_mat[:succ_amount/2, :]
+    succ_mat_for_test = succ_mat[succ_amount/2:, :]
+
+    succ_train_x = succ_mat_for_train[:, 0:sample_size-1]
+    succ_train_y = succ_mat_for_train[:, sample_size-1:]
+
+    succ_test_x = succ_mat_for_test[:, 0:sample_size-1]
+    succ_test_y = succ_mat_for_test[:, sample_size-1:]
+
+    fail_mat_for_train = fail_mat[:succ_amount/2, :]
+    fail_mat_for_test = fail_mat[succ_amount/2:, :]
+
+    fail_train_x = fail_mat_for_train[:, 0:sample_size-1]
+    fail_train_y = fail_mat_for_train[:, sample_size-1:]
+
+    fail_test_x = fail_mat_for_test[:, 0:sample_size-1]
+    fail_test_y = fail_mat_for_test[:, sample_size-1:]
+
+
+    x_train = np.array(np.vstack([succ_train_x, fail_train_x]), dtype=float)
+    y_train = np.array(np.vstack([succ_train_y, fail_train_y]), dtype=float)
+    model = svm.SVC(decision_function_shape='ovo', probability=True).fit(x_train, y_train.ravel())
+
+    p_succ_train = model.predict(succ_train_x)
+    p_succ_test = model.predict(succ_test_x)
+    p_fail_train = model.predict(fail_train_x)
+    p_fail_test = model.predict(fail_test_x)
+
+    succ_train_good = p_succ_train[p_succ_train == 1].size
+    succ_test_good = p_succ_test[p_succ_test == 1].size
+    fail_train_good = p_fail_train[p_fail_train == 0].size
+    fail_test_good = p_fail_test[p_fail_test == 0].size
+
+    print 'nomral SVM---'
+    print "succ train:", succ_train_good, '/', p_succ_train.size
+    print "succ test:", succ_test_good, '/', p_succ_test.size
+    print "fail train:", fail_train_good, '/', p_fail_train.size
+    print "fail test:", fail_test_good, '/', p_fail_test.size
+
+    from sklearn.externals import joblib
+    joblib.dump(model, os.path.join('test.pkl'))
+
+if __name__ == "__main__":
+    try_one_class_svm()
+    try_normal_svm()
