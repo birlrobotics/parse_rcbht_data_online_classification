@@ -12,7 +12,7 @@ class CommonTrainer(object):
         self.train_method = train_method.lower()
         self.best_so_far = {}
 
-    def run_incremental_trainings(self):
+    def run_incremental_trainings(self, graph_title=""):
         import csv
 
         all_mat = self.all_mat
@@ -35,15 +35,28 @@ class CommonTrainer(object):
             test_set_labels.append(mat[max_num_train_sample:, len(mat[0]) - 1:])
 
 
+        #build matrix
+        test_set_samples = np.array(np.vstack(test_set_samples), dtype=float)
+        test_set_labels = np.array(np.vstack(test_set_labels), dtype=float)
+
         # we use the first half of data as training set in an incremental way 
         C = pow(10,-5)
         C_steps = 10
-        size_steps = 10
+        cross_validation_fold = 5 
+        size_steps = 20
+        start_step = 6 
 
-        for now_kernel in ["linear", "poly", "rbf", "sigmoid", "precomputed"]:
+        
+        for now_kernel in ["linear", "poly", "rbf"]:
             for now_C_step in range(C_steps):
                 now_C = C*pow(10, now_C_step)
-                for now_size_step in range(size_steps):
+
+                x = []
+                y_for_max = []
+                y_for_min = []
+                y_for_mean = []
+
+                for now_size_step in range(start_step, size_steps+1):
                     ratio = float(now_size_step)/size_steps
 
                     training_set_samples = list()
@@ -59,13 +72,37 @@ class CommonTrainer(object):
                         training_set_samples.append(mat[0:now_num_train_sample, 0:len(mat[0]) - 1])
                         training_set_labels.append(mat[0:now_num_train_sample, len(mat[0]) - 1:])
                 
-                        from sklearn.model_selection import cross_val_score
-                        clf = svm.SVC(kernel=now_kernel, C=now_C)
-                        scores = cross_val_score(clf, iris.data, iris.target, cv=5)
+                    #build matrix
+                    training_set_samples = np.array(np.vstack(training_set_samples), dtype=float)
+                    training_set_labels = np.array(np.vstack(training_set_labels), dtype=float)
+
+                    print "now_kernel", now_kernel, "now_C", now_C, "now_num_train_sample", training_set_samples.shape[0],
+
+                    from sklearn.model_selection import cross_val_score
+                    clf = svm.SVC(kernel=now_kernel, C=now_C)
+                    scores = cross_val_score(clf, training_set_samples, training_set_labels.ravel(), cv=cross_validation_fold)
 
 
-                        print "now_kernel", now_kernel, "now_C", now_C, "now_num_train_sample", now_num_train_sample
-                        print scores
+
+                    print "min", scores.min(), "max", scores.max(), "Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2)
+
+                    x.append(training_set_samples.shape[0])
+                    y_for_max.append(scores.max().tolist())
+                    y_for_min.append(scores.min().tolist())
+                    y_for_mean.append(scores.mean().tolist())
+
+                import matplotlib.pyplot as plt
+                plt.plot(x, y_for_max, 'ro-', label="max accuracy")
+                plt.plot(x, y_for_min, 'bo-', label="min accuracy")
+                plt.plot(x, y_for_mean, 'ko-', label="mean accuracy")
+                plt.ylabel('accuracy')
+                plt.xlabel('training set size')
+                plt.title(graph_title+"\n(using SVM with kernel=%s C=%s)"%(now_kernel, str(now_C)))
+
+                plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+
+                plt.savefig("tmp_dir/K_"+ now_kernel+ "_C_"+ str(now_C)+".png", bbox_inches='tight')
+                plt.clf()
 
 
     def run_one_training(self):
