@@ -10,9 +10,11 @@ from scipy.interpolate import spline
 import os
 
 from config import failure_class_name_to_id
+
 data_type = "SIM"
-failure_filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/data_cooker_code/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_ONE_SA_ERROR_CHARAC_prob"
-success_filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/data_cooker_code/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_ONE_SA_SUCCESS"
+arm_amount = "ONE"
+failure_filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_"+arm_amount+"_SA_ERROR_CHARAC"
+success_filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_"+arm_amount+"_SA_SUCCESS"
 
 all_mat = {}
 
@@ -39,4 +41,4 @@ if __name__ == "__main__":
 #    while True:
 #        ct.run_one_training()
 
-    ct.run_incremental_trainings(graph_title="success/failure classification")
+    ct.run_incremental_trainings(graph_title="success/failure classification of %s-arm %s data"%(arm_amount , data_type))

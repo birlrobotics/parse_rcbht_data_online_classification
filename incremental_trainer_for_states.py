@@ -9,8 +9,9 @@ from scipy.interpolate import spline
 
 import os
 
-data_type = "SIM"
-filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/data_cooker_code/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_ONE_SA_SUCCESS"
+data_type = "REAL"
+arm_amount = "ONE"
+filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_"+arm_amount+"_SA_SUCCESS"
 
 all_mat = {}
 
@@ -28,4 +29,4 @@ if __name__ == "__main__":
 #    while True:
 #        ct.run_one_training()
 
-    ct.run_incremental_trainings(graph_title="states classification")
+    ct.run_incremental_trainings(graph_title="state classification of %s-arm %s data"%(arm_amount , data_type))

@@ -29,7 +29,7 @@ class CommonTrainer(object):
             mat = all_mat[class_name]
             np.random.shuffle(mat)
 
-            max_num_train_sample = mat.shape[0]/2
+            max_num_train_sample = mat.shape[0]
             
             test_set_samples.append(mat[max_num_train_sample:, 0:len(mat[0]) - 1])
             test_set_labels.append(mat[max_num_train_sample:, len(mat[0]) - 1:])
@@ -44,7 +44,7 @@ class CommonTrainer(object):
         C_steps = 10
         cross_validation_fold = 5 
         size_steps = 20
-        start_step = 6 
+        start_step = 8 
 
         
         for now_kernel in ["linear", "poly", "rbf"]:
@@ -55,6 +55,7 @@ class CommonTrainer(object):
                 y_for_max = []
                 y_for_min = []
                 y_for_mean = []
+                training_time = []
 
                 for now_size_step in range(start_step, size_steps+1):
                     ratio = float(now_size_step)/size_steps
@@ -65,8 +66,10 @@ class CommonTrainer(object):
                     for class_name in all_mat:
                         mat = all_mat[class_name]
 
-                        max_num_train_sample = mat.shape[0]/2
+                        max_num_train_sample = mat.shape[0]
                         now_num_train_sample = int(ratio*max_num_train_sample)
+                        
+                        print "class %s with %s samples"%(class_name, str(now_num_train_sample))
 
                         #collect training samples 
                         training_set_samples.append(mat[0:now_num_train_sample, 0:len(mat[0]) - 1])
@@ -80,8 +83,13 @@ class CommonTrainer(object):
 
                     from sklearn.model_selection import cross_val_score
                     clf = svm.SVC(kernel=now_kernel, C=now_C)
-                    scores = cross_val_score(clf, training_set_samples, training_set_labels.ravel(), cv=cross_validation_fold)
 
+                    import time
+                    training_start_time = time.time()
+                    scores = cross_val_score(clf, training_set_samples, training_set_labels.ravel(), cv=cross_validation_fold)
+                    training_finish_time = time.time()
+
+                    training_time.append(training_finish_time-training_start_time)
 
 
                     print "min", scores.min(), "max", scores.max(), "Accuracy: %0.2f (+/- %0.2f)" % (scores.mean(), scores.std() * 2)
@@ -97,11 +105,25 @@ class CommonTrainer(object):
                 plt.plot(x, y_for_mean, 'ko-', label="mean accuracy")
                 plt.ylabel('accuracy')
                 plt.xlabel('training set size')
-                plt.title(graph_title+"\n(using SVM with kernel=%s C=%s)"%(now_kernel, str(now_C)))
+                plt.title(graph_title+"\n(using SVM with kernel=%s, C=%s, cross-validation fold=%s, training time mean=%ss)"%(now_kernel, str(now_C), str(cross_validation_fold), str(np.mean(training_time))))
 
                 plt.legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
 
-                plt.savefig("tmp_dir/K_"+ now_kernel+ "_C_"+ str(now_C)+".png", bbox_inches='tight')
+                plt.savefig("tmp_dir/K_"+ now_kernel+ "_C_"+ str(now_C)+".eps", bbox_inches='tight')
+
+                dat_file = open("tmp_dir/K_"+ now_kernel+ "_C_"+ str(now_C)+".txt", "w")
+
+                dat_file.write("now_kernel: "+str(now_kernel)+"\n")
+                dat_file.write("now_C: "+str(now_C)+"\n")
+                dat_file.write("cross_validation_fold: "+str(cross_validation_fold)+"\n")
+                dat_file.write("training time mean: "+str(np.mean(training_time))+"s\n")
+
+                dat_file.write("x: "+str(x)+"\n")
+                dat_file.write("y_for_max: "+str(y_for_max)+"\n")
+                dat_file.write("y_for_min: "+str(y_for_min)+"\n")
+                dat_file.write("y_for_mean: "+str(y_for_mean)+"\n")
+                dat_file.close()
+    
                 plt.clf()
 
 
