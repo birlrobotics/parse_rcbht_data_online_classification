@@ -9,14 +9,17 @@ from scipy.interpolate import spline
 
 import os
 
-data_type = "REAL"
-arm_amount = "ONE"
+data_type = "SIM"
+arm_amount = "TWO"
 filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_"+arm_amount+"_SA_SUCCESS"
 
 all_mat = {}
 
 filelist = ['training_set_for_approach', 'training_set_for_rotation',
     'training_set_for_insertion', 'training_set_for_mating']
+
+if arm_amount == "TWO":
+    filelist = ["combined/"+i for i in filelist]
 
 for file in filelist:
     mat = np.genfromtxt(os.path.join(filepath, file), dtype='string', delimiter=',')
