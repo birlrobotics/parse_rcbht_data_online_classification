@@ -9,11 +9,12 @@ label_map = {
     'failure' : 0
 }
 
-proba_threshold = 0.95
+proba_threshold = 0.93
 
 model_dir = "./good_models"
-model_for_SF = "data_type_SIM_model_for_success_and_failure_method_svm_accuracy_100_avgProbaOfAll_97_avgByClass_C0P98_C1P96_.pkl"
-model_for_states = "model_for_state_classification_dataType_REAL_method_svm_accuracy_95_avgProbaOfAll_84_avgByClass_C0P90_C1P87_C2P73_C3P87_.pkl"
+#model_for_SF = "data_type_SIM_model_for_success_and_failure_method_svm_accuracy_100_avgProbaOfAll_97_avgByClass_C0P98_C1P96_.pkl"
+model_for_SF = "test.pkl"
+model_for_states = "data_type_SIM_model_for_state_method_svm_accuracy_82_avgProbaOfAll_54_avgByClass_C0P86_C1P67_C2P16_C3P48_.pkl"
 
 failure_x_base = ["+x", ""]
 failure_y_base = ["+y", "-y", ""]
