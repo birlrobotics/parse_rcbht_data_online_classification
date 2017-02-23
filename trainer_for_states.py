@@ -10,12 +10,16 @@ from scipy.interpolate import spline
 import os
 
 data_type = "SIM"
-filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/data_cooker_code/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_ONE_SA_SUCCESS"
+arm_type = "ONE"
+filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_"+arm_type+"_SA_SUCCESS"
 
 all_mat = {}
 
 filelist = ['training_set_for_approach', 'training_set_for_rotation',
     'training_set_for_insertion', 'training_set_for_mating']
+
+if arm_type == "TWO":
+    filelist = ["combined/"+i for i in filelist]
 
 for file in filelist:
     mat = np.genfromtxt(os.path.join(filepath, file), dtype='string', delimiter=',')
@@ -35,6 +39,6 @@ if __name__ == "__main__":
         parser.error("you have to provide a method in -m or --method")
 
     from trainer_common import CommonTrainer
-    ct = CommonTrainer(all_mat, "data_type_"+data_type+"_model_for_state_", options.method)
+    ct = CommonTrainer(all_mat, arm_type+"_data_type_"+data_type+"_model_for_state_", options.method)
     while True:
         ct.run_one_training()

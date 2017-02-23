@@ -10,7 +10,7 @@ from scipy.interpolate import spline
 import os
 
 from config import failure_class_name_to_id
-data_type = "REAL"
+data_type = "SIM"
 failure_filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_ONE_SA_ERROR_CHARAC"
 success_filepath = "/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/parse_rcbht_data/my_training_data/"+data_type+"_HIRO_ONE_SA_SUCCESS"
 

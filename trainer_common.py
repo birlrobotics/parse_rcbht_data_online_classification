@@ -11,6 +11,7 @@ class CommonTrainer(object):
         self.custom_signature = custom_signature
         self.train_method = train_method.lower()
         self.best_so_far = {}
+        self.train_count = 0
 
     def run_incremental_trainings(self, graph_title=""):
         import csv
@@ -128,6 +129,8 @@ class CommonTrainer(object):
 
 
     def run_one_training(self):
+        self.train_count += 1
+
         all_mat = self.all_mat
         train_method = self.train_method
         best_so_far = self.best_so_far
@@ -225,6 +228,7 @@ class CommonTrainer(object):
         if new_progress: 
             signature = self.custom_signature 
             signature += "method_"+str(train_method)+"_"
+            signature += "traincount_"+str(self.train_count)+"_"
             signature += "accuracy_"+str(test_score)+"_"
             signature += "avgProbaOfAll_"+str(avg_of_all)+"_"
             signature += "avgByClass_"
