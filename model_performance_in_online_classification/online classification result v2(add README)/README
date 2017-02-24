@@ -1,0 +1,15 @@
+naming convention:
+    "REAL SF" means "success/failure classification using real robot data"
+    "SIM State" means "state classfication using simulated robot data"
+    "SIM_data_type_SIM_model_for_success_and_failure_method_svm_traincount_7966_accuracy_100_avgProbaOfAll_97_avgByClass_C0P98_C1P95__thre_0.7_" means
+        - SIM_data_type: using simulated robot data
+        - SIM_model_for_success_and_failure: the model used is for success/failure classification and it's trained with simulated robot data
+        - method_svm: the model is trained by SVM
+        - traincount_7966: the model was taken when  we've run the training for 7966 times
+        - accuracy_100: the model achive 100% accuracy in test set
+        - avgProbaofAll_97: stands for "average probability of all". it means "when the model predicts a label correctly, it will give 97% probability on average".
+        - avgByClass:
+            -C0P98: it means "when the model predicts class 0 correctly, it will give 98% probability on average"
+            -C1P95: it means "when the model predicts class 1 correctly, it will give 95% probability on average"
+
+        - thre_0.7: stands for "threshold 0.7". it means "if the model gives a prediction with probability lower than 70%, we'll treat it as an unconfident prediction and thus ignore it(use a white pixel to represent it in the image)"
