@@ -112,7 +112,7 @@ while proba_threshold < 1:
         img_width = max_len
         
         output_signature = config.online_classification_data_type+"_"+model_signature+"_thre_"+str(proba_threshold)+"_" 
-        output_dir = os.path.join("model_performance_in_online_classification", config.online_classification_data_type, classification_type, output_signature)
+        output_dir = os.path.join("model_performance_in_online_classification", "stream_interval_"+config.stream_interval, config.online_classification_data_type, classification_type, output_signature)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
@@ -152,7 +152,7 @@ while proba_threshold < 1:
 import csv
 fieldnames = ["data_type", 'threshold', 'class', 'green_count_start_at', 
     'min_green_count', 'mean_green_count', 'max_green_count', "avg_trial_length"]
-csv_file = open("model_performance_in_online_classification/green_count_report_of_%s_data.txt"%(config.online_classification_data_type,), "w")
+csv_file = open(os.path.join("model_performance_in_online_classification", "stream_interval_"+config.stream_interval, "green_count_report_of_%s_data.txt"%(config.online_classification_data_type,)), "w")
 writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 writer.writeheader()
 for row in rows:

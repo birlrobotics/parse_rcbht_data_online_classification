@@ -1,7 +1,8 @@
-online_classification_data_type = "SIM"
+online_classification_data_type = "REAL"
 arm_type = "ONE"
+stream_interval = "0.1"
 
-streaming_data_dir = '/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/parse_rcbht_data/my_streaming_experiments/'+online_classification_data_type
+streaming_data_dir = '/Users/sklaw_mba/Desktop/ex/dr_juan_proj/workshop/parse_rcbht_data/my_streaming_experiments/stream_interval_%s/%s'%(stream_interval, online_classification_data_type)
 
 label_map = {
     'approach' : 0,
