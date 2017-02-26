@@ -16,9 +16,14 @@ label_map = {
 proba_threshold = 0.7
 
 model_dir = "./good_models"
-#model_for_SF = "data_type_SIM_model_for_success_and_failure_method_svm_accuracy_100_avgProbaOfAll_97_avgByClass_C0P98_C1P96_.pkl"
-model_for_SF = "data_type_SIM_model_for_success_and_failure_method_svm_traincount_7966_accuracy_100_avgProbaOfAll_97_avgByClass_C0P98_C1P95_.pkl"
-model_for_states = "data_type_SIM_model_for_state_method_svm_traincount_2774_accuracy_89_avgProbaOfAll_59_avgByClass_C0P87_C1P79_C2P31_C3P39_.pkl"
+
+if online_classification_data_type == "REAL":
+    model_for_SF = "data_type_REAL_model_for_success_and_failure_method_svm_traincount_10114_accuracy_100_avgProbaOfAll_81_avgByClass_C0P79_C1P83_.pkl"
+    model_for_states = "data_type_REAL_model_for_state_method_svm_traincount_79_accuracy_95_avgProbaOfAll_84_avgByClass_C0P89_C1P75_C2P85_C3P86_.pkl"
+elif online_classification_data_type == "SIM":
+    model_for_SF = "data_type_SIM_model_for_success_and_failure_method_svm_traincount_7966_accuracy_100_avgProbaOfAll_97_avgByClass_C0P98_C1P95_.pkl"
+    model_for_states = "data_type_SIM_model_for_state_method_svm_traincount_2774_accuracy_89_avgProbaOfAll_59_avgByClass_C0P87_C1P79_C2P31_C3P39_.pkl"
+    
 
 failure_x_base = ["+x", ""]
 failure_y_base = ["+y", "-y", ""]
