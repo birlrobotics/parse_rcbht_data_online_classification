@@ -7,7 +7,7 @@ This repo is in charge of running machine learning algorithm and online classifi
 
 
 # what can this repo do
-1. train classifiers using training samples.
+1. train classifiers using training samples.  
     The following scripts are designed to train classifiers:
     * ./trainer_for_failure_classes.py
     * ./trainer_for_states.py
@@ -16,7 +16,7 @@ This repo is in charge of running machine learning algorithm and online classifi
     The models generated are stored in:
     * ./models_by_method
 
-1. run online classification
+1. run online classification  
     The following scripts are desgiend to run online classification:
     * ./sim_online_classification.py
 
@@ -29,3 +29,4 @@ This repo is in charge of running machine learning algorithm and online classifi
 
 # related repo
 The repo in charge of generating training samples and streaming experiments is https://github.com/rojas70/parse_rcbht_data
+
