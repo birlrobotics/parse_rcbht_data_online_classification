@@ -2,8 +2,8 @@
 This repo is in charge of running machine learning algorithm and online classification assessment.
 
 # the data for which this repo is designed
-* the training samples in: https://github.com/rojas70/parse_rcbht_data/tree/master/my_training_data
-* the streamed experiments in: https://github.com/rojas70/parse_rcbht_data/tree/master/my_streaming_experiments
+* the training samples in: https://github.com/birlrobotics/rcbht_data_processor/tree/master/my_training_data
+* the streamed experiments in: https://github.com/birlrobotics/rcbht_data_processor/tree/master/my_streaming_experiments
 
 
 # what can this repo do
@@ -28,5 +28,5 @@ This repo is in charge of running machine learning algorithm and online classifi
 
 
 # related repo
-The repo in charge of generating training samples and streaming experiments is https://github.com/rojas70/parse_rcbht_data
+The repo in charge of generating training samples and streaming experiments is https://github.com/birlrobotics/rcbht_data_processor
 
